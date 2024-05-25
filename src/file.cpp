@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <string>
 
-namespace lox {
+namespace Lox {
 
 std::string read_file(char const *pathname) {
   std::string buffer;
@@ -24,10 +24,10 @@ std::string read_file(char const *pathname) {
     auto const read_len = std::fread(buffer.data(), 1, left_len, fp);
     left_len -= read_len;
     if (std::ferror(fp)) {
-      throw lox::Exception("fread failed");
+      throw Lox::Exception("fread failed");
     }
   }
 
   return buffer;
 }
-} // namespace lox
+} // namespace Lox

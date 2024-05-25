@@ -2,6 +2,6 @@
 
 #include <string>
 
-namespace lox {
+namespace Lox {
 std::string read_file(char const *pathname);
-}
+} // namespace Lox
