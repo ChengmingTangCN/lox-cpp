@@ -20,8 +20,7 @@ inline void error(int lineno, char const *msg) {
   if (!error_msgs.empty()) {
     oss << '\n';
   }
-  oss << lineno << ": "
-      << "error: " << msg;
+  oss << "error: " << lineno << ": " << msg;
   error_msgs.emplace_back(std::move(oss).str());
 }
 

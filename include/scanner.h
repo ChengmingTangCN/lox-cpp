@@ -146,8 +146,12 @@ inline std::string to_string(TokenType type) {
   }
 }
 
+class Parser;
+
 class Token {
   friend std::ostream &operator<<(std::ostream &out, Token const &token);
+
+  friend class Parser;
 
 public:
   Token(uint32_t lineno, TokenType type, std::string lexeme);
@@ -163,6 +167,16 @@ public:
   ~Token() noexcept;
 
   void swap(Token &other) noexcept;
+
+  uint32_t lineno() const { return m_lineno; }
+
+  TokenType type() const { return m_type; }
+
+  std::string_view lexeme() const { return m_lexeme; }
+
+  char const *str_literal() const {return m_literal.str; }
+
+  double number_literal() const {return m_literal.number; }
 
 private:
   uint32_t m_lineno;
@@ -216,8 +230,7 @@ private:
     return false;
   }
 
-  template <typename Predicate>
-  bool match(Predicate const &predicate) {
+  template <typename Predicate> bool match(Predicate const &predicate) {
     if (is_at_end())
       return false;
     if (predicate(m_source[m_current])) {

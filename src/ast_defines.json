@@ -1,0 +1,38 @@
+{
+  "Docs": [
+    ""
+  ],
+  "Defines": [
+    "using KTokenRef = Token const &;"
+  ],
+  "Classes": {
+    "Expr": {
+      "Defines": [
+        "using ExprPtr = std::unique_ptr<Expr>;"
+      ],
+      "Childs": {
+        "Literal KTokenRef:token": {
+          "Desc": [
+            "Literals include NUMBER, STRING, 'true', 'false' and 'nil'.",
+            "Literal node represents different literals by storing Token const references."
+          ]
+        },
+        "Binary ExprPtr:left, KTokenRef:op, ExprPtr:right": {
+          "Desc": [
+            "Binary operator node."
+          ]
+        },
+        "Unary KTokenRef:op, ExprPtr:right": {
+          "Desc": [
+            "Unary operator node."
+          ]
+        },
+        "Grouping ExprPtr:expr": {
+          "Desc": [
+            "Parentheses operator node."
+          ]
+        }
+      }
+    }
+  }
+}

@@ -32,6 +32,7 @@ Token::Token(uint32_t lineno, TokenType type, std::string lexeme)
     auto const len = m_lexeme.size() - 2;
     m_literal.str = new char[len + 1];
     std::memcpy(m_literal.str, m_lexeme.c_str() + 1, len);
+    m_literal.str[len] = '\0';
   } else if (type == TokenType::NUMBER) {
     // Initialize number literal
     double number = std::stod(m_lexeme);
@@ -44,7 +45,7 @@ Token::Token(Token const &other)
   if (other.m_type == TokenType::STRING) {
     auto const str_len = std::strlen(m_literal.str);
     char *new_str = new char[str_len + 1];
-    std::memcpy(new_str, other.m_literal.str, str_len);
+    std::memcpy(new_str, other.m_literal.str, str_len + 1);
     m_literal.str = new_str;
   } else {
     m_literal.data = other.m_literal.data;

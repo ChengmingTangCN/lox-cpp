@@ -1,4 +1,6 @@
+#include "ast_printer.h"
 #include "file.h"
+#include "parser.h"
 #include "scanner.h"
 
 #include <cstdio>
@@ -9,9 +11,21 @@
 static void run(std::string const &source) {
   Lox::Scanner scanner(source);
   auto const &tokens = scanner.scan_tokens();
+
+  Lox::Parser parser(tokens);
+  Lox::ExprPtr expr = parser.parse();
+
+  if (!Lox::error_msgs.empty()) {
+    return;
+  }
+
   for (auto const &token : tokens) {
     std::cout << token << '\n';
   }
+
+  Lox::AstPrinter ast_printer(std::cout);
+  expr->accept(ast_printer);
+  std::cout << "\n";
 }
 
 static void run_file(char const *pathname) {
