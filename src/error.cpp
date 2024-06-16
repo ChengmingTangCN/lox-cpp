@@ -1,5 +1,7 @@
 #include "error.h"
 
 namespace Lox {
-std::vector<std::string> error_msgs;
+
+std::vector<std::string> syntax_error_msgs;
+
 } // namespace Lox

@@ -10,30 +10,30 @@
 
 namespace Lox {
 
-extern std::vector<std::string> error_msgs;
+extern std::vector<std::string> syntax_error_msgs;
 
 /**
- * @brief Insert an error message into `error_msgs`, which can be dumped later.
+ * @brief Insert an error message into `syntax_error_msgs`, which can be dumped
+ * later.
  */
-inline void error(int lineno, char const *msg) {
+inline void syntax_error(int lineno, char const *msg) {
   std::ostringstream oss;
-  if (!error_msgs.empty()) {
+  if (!syntax_error_msgs.empty()) {
     oss << '\n';
   }
   oss << "error: " << lineno << ": " << msg;
-  error_msgs.emplace_back(std::move(oss).str());
+  syntax_error_msgs.emplace_back(std::move(oss).str());
 }
 
 /**
- * @brief Dump all messages from `error_msgs`. After this, `error_msgs` is
- * empty.
+ * @brief Dump all messages from `msgs`. After this, `msgs` is empty.
  */
-inline std::string dump_error_msgs() {
+inline std::string dump_error_msgs(std::vector<std::string> &msgs) {
   std::ostringstream oss;
-  for (auto &&msg : error_msgs) {
+  for (auto &&msg : msgs) {
     oss << std::move(msg);
   }
-  error_msgs.clear();
+  msgs.clear();
   return std::move(oss).str();
 }
 
@@ -58,6 +58,13 @@ protected:
       err_msg += ": ";                                                         \
       err_msg += std::strerror(errno);                                         \
       throw Lox::Exception(err_msg);                                           \
+    }                                                                          \
+  } while (false);
+
+#define THROW_ASSERT(pred, msg)                                                \
+  do {                                                                         \
+    if (!pred) {                                                               \
+      throw Lox::Exception(msg);                                               \
     }                                                                          \
   } while (false);
 } // namespace Lox

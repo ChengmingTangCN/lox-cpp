@@ -41,7 +41,7 @@ void AstPrinter::visit(Literal &node) {
     m_out << node.m_token.str_literal();
     break;
   default:
-    Lox::error(
+    Lox::syntax_error(
         node.m_token.lineno(),
         "An error occurred in Lox. A literal of invalid type was encountered.");
     break;

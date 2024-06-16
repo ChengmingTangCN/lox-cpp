@@ -104,7 +104,7 @@ void Scanner::tokenize_string() {
       skip();
     }
   }
-  Lox::error(m_lineno, "Unterminated string literal");
+  Lox::syntax_error(m_lineno, "Unterminated string literal");
 }
 
 void Scanner::tokenize_number() {
@@ -223,7 +223,7 @@ void Scanner::scan_token() {
       tokenize_identifier();
       break;
     }
-    error(m_lineno, "Invalid character");
+    syntax_error(m_lineno, "Invalid character");
     break;
   }
 }

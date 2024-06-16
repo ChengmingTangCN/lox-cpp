@@ -174,9 +174,9 @@ public:
 
   std::string_view lexeme() const { return m_lexeme; }
 
-  char const *str_literal() const {return m_literal.str; }
+  char const *str_literal() const { return m_literal.str; }
 
-  double number_literal() const {return m_literal.number; }
+  double number_literal() const { return m_literal.number; }
 
 private:
   uint32_t m_lineno;

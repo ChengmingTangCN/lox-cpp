@@ -1,6 +1,8 @@
 #include "ast_printer.h"
 #include "file.h"
+#include "interpreter.h"
 #include "parser.h"
+#include "runtime_error.h"
 #include "scanner.h"
 
 #include <cstdio>
@@ -15,7 +17,7 @@ static void run(std::string const &source) {
   Lox::Parser parser(tokens);
   Lox::ExprPtr expr = parser.parse();
 
-  if (!Lox::error_msgs.empty()) {
+  if (!Lox::syntax_error_msgs.empty()) {
     return;
   }
 
@@ -25,13 +27,26 @@ static void run(std::string const &source) {
 
   Lox::AstPrinter ast_printer(std::cout);
   expr->accept(ast_printer);
-  std::cout << "\n";
+  std::cout << '\n';
+
+  Lox::Interpreter interpreter;
+  interpreter.interpret(expr.get());
+
+  if (!Lox::runtime_error_msgs.empty()) {
+    return;
+  }
+
+  std::cout << interpreter.result() << '\n';
 }
 
 static void run_file(char const *pathname) {
   auto const bytes = Lox::read_file(pathname);
   run(bytes);
-  auto error_msg = Lox::dump_error_msgs();
+  auto error_msg = Lox::dump_error_msgs(Lox::syntax_error_msgs);
+  if (!error_msg.empty()) {
+    throw Lox::Exception(std::move(error_msg));
+  }
+  error_msg = Lox::dump_error_msgs(Lox::runtime_error_msgs);
   if (!error_msg.empty()) {
     throw Lox::Exception(std::move(error_msg));
   }
@@ -45,7 +60,11 @@ static void run_prompt() {
       break;
     }
     run(line_str);
-    auto error_msg = Lox::dump_error_msgs();
+    auto error_msg = Lox::dump_error_msgs(Lox::syntax_error_msgs);
+    if (!error_msg.empty()) {
+      std::cerr << error_msg << std::endl;
+    }
+    error_msg = Lox::dump_error_msgs(Lox::runtime_error_msgs);
     if (!error_msg.empty()) {
       std::cerr << error_msg << std::endl;
     }

@@ -5,6 +5,9 @@ set(SRCS
   scanner.cpp
   parser.cpp
   ast_printer.cpp
+  value.cpp
+  interpreter.cpp
+  runtime_error.cpp
 )
 
 add_executable(lox ${SRCS})

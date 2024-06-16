@@ -115,7 +115,7 @@ void Parser::consume(std::initializer_list<TokenType> types,
   } else {
     msg = token.m_lexeme + ": " + std::string(error_msg);
   }
-  Lox::error(token.m_lineno, msg.c_str());
+  Lox::syntax_error(token.m_lineno, msg.c_str());
   throw ParseError("parse error");
 }
 
